@@ -1,0 +1,8 @@
+{
+    "name": "botble/inecobank",
+    "description": "InecoBank Payment Gateway",
+    "type": "package",
+    "require": {
+        "inecobank/inecobank-php": "^1.0"
+    }
+}

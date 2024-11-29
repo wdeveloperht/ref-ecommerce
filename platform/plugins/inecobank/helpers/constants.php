@@ -1,0 +1,8 @@
+<?php
+
+if (! defined('INECOBANK_PAYMENT_METHOD_NAME')) {
+    define('INECOBANK_PAYMENT_METHOD_NAME', 'inecobank');
+}
+if (! defined('INECOBANK_PAYMENT_DEFAULT_CURRENCY')) {
+    define('INECOBANK_PAYMENT_DEFAULT_CURRENCY', 'AMD');
+}

@@ -1,0 +1,11 @@
+{
+    "id": "botble/gallery",
+    "name": "Gallery",
+    "namespace": "Botble\\Gallery\\",
+    "provider": "Botble\\Gallery\\Providers\\GalleryServiceProvider",
+    "author": "Tigran Nalbandyan",
+    "url": "https://www.linkedin.com/in/tigran-nalbandyan/",
+    "version": "1.0.0",
+    "description": "A plugin to create Gallery",
+    "minimum_core_version": "7.3.0"
+}
