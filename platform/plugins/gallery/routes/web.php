@@ -10,19 +10,19 @@ Route::group(['namespace' => 'Botble\Gallery\Http\Controllers'], function (): vo
 
             Route::post('sorting', [
                 'as' => 'sorting',
-                'uses' => 'GallerySettingController@postSorting',
+                'uses' => 'GalleryController@postSorting',
                 'permission' => 'gallery.edit',
             ]);
         });
 
         Route::group(['prefix' => 'gallery-items', 'as' => 'gallery-item.'], function (): void {
-            Route::resource('', 'GallerySettingController')->except([
+            Route::resource('', 'GalleryItemController')->except([
                 'index',
             ])->parameters(['' => 'gallery-item']);
 
             Route::match(['GET', 'POST'], 'list/{id}', [
                 'as' => 'index',
-                'uses' => 'GallerySettingController@index',
+                'uses' => 'GalleryItemController@index',
             ])->wherePrimaryKey();
         });
 

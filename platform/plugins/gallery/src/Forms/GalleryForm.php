@@ -3,9 +3,11 @@
 namespace Botble\Gallery\Forms;
 
 use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
+use Botble\Base\Forms\FieldOptions\MediaImageFieldOption;
 use Botble\Base\Forms\FieldOptions\NameFieldOption;
 use Botble\Base\Forms\FieldOptions\StatusFieldOption;
 use Botble\Base\Forms\FieldOptions\TextFieldOption;
+use Botble\Base\Forms\Fields\MediaImageField;
 use Botble\Base\Forms\Fields\SelectField;
 use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\Fields\TextField;
@@ -37,6 +39,11 @@ class GalleryForm extends FormAbstract
                 ->maxLength(120)
             )
             ->add('description', TextareaField::class, DescriptionFieldOption::make())
+            ->add('image',
+                MediaImageField::class,
+                MediaImageFieldOption::make()
+//                ->required()
+            )
             ->add('status', SelectField::class, StatusFieldOption::make())
             ->setBreakFieldPoint('status')
             ->when($this->model->id, function (): void {

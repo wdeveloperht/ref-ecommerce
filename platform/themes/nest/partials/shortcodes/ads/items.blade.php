@@ -1,6 +1,6 @@
 @if ($keys->isNotEmpty())
     @php $shortcode = $shortcode ?? null; @endphp
-    @if ($style == 'style-5')
+    @if ($style == 'style-2')
         <section class="section-padding">
             <div class="container">
                 <div class="row">

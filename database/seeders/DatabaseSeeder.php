@@ -34,6 +34,7 @@ class DatabaseSeeder extends BaseSeeder
             ShippingSeeder::class,
             StoreLocatorSeeder::class,
             FlashSaleSeeder::class,
+            GallerySeeder::class,
             SimpleSliderSeeder::class,
             BlogSeeder::class,
             PageSeeder::class,

@@ -21,4 +21,5 @@ return [
     'simple_slider_shortcode_description' => 'Add a simple slider',
     'select_slider' => 'Select a slider',
     'shortcode' => 'Shortcode',
+    'more' => 'More',
 ];

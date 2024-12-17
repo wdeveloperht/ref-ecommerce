@@ -32,6 +32,11 @@ class ProductImporter extends BaseProductImporter
         return route('marketplace.vendor.import.products.download-example');
     }
 
+    public function getSyncUrl(): ?string
+    {
+        return route('marketplace.vendor.sync.products.index');
+    }
+
     public function getExportUrl(): ?string
     {
         return route('marketplace.vendor.export.products.index');

@@ -9,10 +9,11 @@ return new class () extends Migration {
     {
         Schema::create('gallery', function (Blueprint $table): void {
             $table->id();
+            $table->string('status', 60)->default('published');
             $table->string('name', 120);
             $table->string('key', 120);
             $table->string('description', 400)->nullable();
-            $table->string('status', 60)->default('published');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
 

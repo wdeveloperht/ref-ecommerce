@@ -14,7 +14,9 @@
     <label class="form-label">{{ __('Style') }}</label>
     <select name="style" class="form-select">
         <option value="">{{ __('Default') }}</option>
-        <option value="style-5">{{ __('Style 2') }}</option>
+        <option value="style-2" @if (Arr::get($attributes, 'style') == 'style-2') selected @endif>{{ __('Style 2') }}</option>
+        <option value="style-4" @if (Arr::get($attributes, 'style') == 'style-4') selected @endif>{{ __('Style 4') }}</option>
+        <option value="style-5" @if (Arr::get($attributes, 'style') == 'style-5') selected @endif>{{ __('Style 5') }}</option>
     </select>
 </div>
 

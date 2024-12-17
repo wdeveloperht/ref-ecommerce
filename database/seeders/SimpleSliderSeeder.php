@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use Botble\Base\Facades\MetaBox;
 use Botble\Base\Supports\BaseSeeder;
 use Botble\Language\Models\LanguageMeta;
-use Botble\SimpleSlider\Models\Gallery;
-use Botble\SimpleSlider\Models\GalleryItem;
+use Botble\SimpleSlider\Models\SimpleSlider;
+use Botble\SimpleSlider\Models\SimpleSliderItem;
 use Illuminate\Support\Arr;
 
 class SimpleSliderSeeder extends BaseSeeder
@@ -15,8 +15,8 @@ class SimpleSliderSeeder extends BaseSeeder
     {
         $this->uploadFiles('sliders');
 
-        Gallery::query()->truncate();
-        GalleryItem::query()->truncate();
+        SimpleSlider::query()->truncate();
+        SimpleSliderItem::query()->truncate();
 
         $sliders = [
             [
@@ -79,7 +79,7 @@ class SimpleSliderSeeder extends BaseSeeder
         ];
 
         foreach ($sliders as $index => $value) {
-            $slider = Gallery::query()->create(Arr::only($value, ['name', 'key']));
+            $slider = SimpleSlider::query()->create(Arr::only($value, ['name', 'key']));
 
             LanguageMeta::saveMetaData($slider);
 
@@ -95,7 +95,7 @@ class SimpleSliderSeeder extends BaseSeeder
                         'simple_slider_id' => $slider->id,
                     ];
 
-                    GalleryItem::query()->create($item);
+                    SimpleSliderItem::query()->create($item);
                 }
             } else {
                 foreach (collect($sliderItems)->take($value['total']) as $key => $item) {
@@ -103,7 +103,7 @@ class SimpleSliderSeeder extends BaseSeeder
                     $item['order'] = $key + 1;
                     $item['simple_slider_id'] = $slider->id;
 
-                    GalleryItem::query()->create($item);
+                    SimpleSliderItem::query()->create($item);
                 }
             }
         }

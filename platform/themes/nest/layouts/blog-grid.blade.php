@@ -15,6 +15,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-9">
+                    @if(Theme::pageData()->image)
+                        <figure class="single-thumbnail">
+                            <img src="{!!RvMedia::getImageUrl(Theme::pageData()->image) !!}" alt="{{ Theme::pageData()->name }}">
+                        </figure>
+                    @endif
                     {!! Theme::content() !!}
                 </div>
                 <div class="col-lg-3 primary-sidebar sticky-sidebar">

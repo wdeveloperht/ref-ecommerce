@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
+use Illuminate\Support\Facades\Log;
 
 class GuzzleRequestBuilder implements RequestBuilder
 {
@@ -179,16 +180,15 @@ class GuzzleRequestBuilder implements RequestBuilder
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $response = $client->request($this->method, $this->uri, $this->options);
-
             if ($this->uriShouldBeLogged()) {
-                \Log::info($this->logMessage, $this->logBodyFromResponse($response));
+                Log::info($this->logMessage, $this->logBodyFromResponse($response));
             }
 
             return new ClientApiResponse($response);
         } catch (BadResponseException|RequestException $e) {
             $response = $e->getResponse();
 
-            \Log::error($this->logMessage, [
+            Log::error($this->logMessage, [
                 'requestAndResponse' => $this->logBodyFromResponse($response),
                 'exception' => [
                     'message' => $e->getMessage(),

@@ -176,7 +176,7 @@ class ProductCategoryHelper
         $cacheKey = 'ecommerce_categories_for_widgets_' . md5($cache->generateCacheKeyFromInput() . serialize(func_get_args()));
 
         if ($cache->has($cacheKey)) {
-           // return $cache->get($cacheKey);
+           return $cache->get($cacheKey);
         }
 
         $tablePrefix = Schema::getConnection()->getTablePrefix();

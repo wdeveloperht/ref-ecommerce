@@ -12,10 +12,11 @@ class Gallery extends BaseModel
     protected $table = 'gallery';
 
     protected $fillable = [
+        'status',
         'name',
         'key',
         'description',
-        'status',
+        'image',
     ];
 
     protected $casts = [
@@ -34,6 +35,6 @@ class Gallery extends BaseModel
 
     public function sliderItems(): HasMany
     {
-        return $this->hasMany(GalleryItem::class)->orderBy('simple_slider_items.order');
+        return $this->hasMany(GalleryItem::class)->orderBy('gallery_items.order');
     }
 }

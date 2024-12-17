@@ -7,11 +7,11 @@ use Botble\Base\Http\Controllers\BaseController;
 use Botble\Gallery\Forms\GalleryItemForm;
 use Botble\Gallery\Http\Requests\GalleryItemRequest;
 use Botble\Gallery\Models\GalleryItem;
-use Botble\Gallery\Tables\SimpleSliderItemTable;
+use Botble\Gallery\Tables\GalleryItemTable;
 
 class GalleryItemController extends BaseController
 {
-    public function index(SimpleSliderItemTable $dataTable)
+    public function index(GalleryItemTable $dataTable)
     {
         return $dataTable->renderTable();
     }
@@ -25,7 +25,7 @@ class GalleryItemController extends BaseController
         return $this
             ->httpResponse()
             ->setData([
-                'title' => trans('plugins/gallery::gallery.create_new_slide'),
+                'title' => trans('plugins/gallery::gallery.create_new_gallery'),
                 'content' => $form,
             ]);
     }
@@ -41,25 +41,25 @@ class GalleryItemController extends BaseController
 
     public function edit(int|string $id)
     {
-        $simpleSliderItem = GalleryItem::query()->findOrFail($id);
+        $galleryItem = GalleryItem::query()->findOrFail($id);
 
-        $form = GalleryItemForm::createFromModel($simpleSliderItem)
+        $form = GalleryItemForm::createFromModel($galleryItem)
             ->setUseInlineJs(true)
             ->renderForm();
 
         return $this
             ->httpResponse()
             ->setData([
-                'title' => trans('plugins/gallery::gallery.edit_slide', ['id' => $simpleSliderItem->getKey()]),
+                'title' => trans('plugins/gallery::gallery.edit_gallery', ['id' => $galleryItem->getKey()]),
                 'content' => $form,
             ]);
     }
 
     public function update(int|string $id, GalleryItemRequest $request)
     {
-        $simpleSliderItem = GalleryItem::query()->findOrFail($id);
+        $galleryItem = GalleryItem::query()->findOrFail($id);
 
-        GalleryItemForm::createFromModel($simpleSliderItem)
+        GalleryItemForm::createFromModel($galleryItem)
             ->setRequest($request)
             ->save();
 
@@ -70,8 +70,8 @@ class GalleryItemController extends BaseController
 
     public function destroy(int|string $id)
     {
-        $simpleSliderItem = GalleryItem::query()->findOrFail($id);
+        $galleryItem = GalleryItem::query()->findOrFail($id);
 
-        return DeleteResourceAction::make($simpleSliderItem);
+        return DeleteResourceAction::make($galleryItem);
     }
 }

@@ -208,6 +208,12 @@ return [
         'type' => '* Type field',
         'type_description' => 'Choose the discount type: Fixed (reduce a specific amount) or Percent (reduce by a percentage).',
     ],
+    'sync' => [
+        'description' => 'Sync your product data to AS-Accountant.',
+        'total_items' => 'Total Items',
+        'total_products' => 'Total Products',
+        'total_variations' => 'Total Variations',
+    ],
     'export' => [
         'description' => 'Export your product data to CSV or Excel files.',
         'total_items' => 'Total Items',

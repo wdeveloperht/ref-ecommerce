@@ -36,7 +36,7 @@ class HookServiceProvider extends ServiceProvider
                         'key',
                         SelectField::class,
                         SelectFieldOption::make()
-                            ->label(trans('plugins/gallery::gallery.select_slider'))
+                            ->label(trans('plugins/gallery::gallery.select_gallery'))
                             ->choices(Gallery::query()
                                 ->wherePublished()
                                 ->pluck('name', 'key')
@@ -48,33 +48,47 @@ class HookServiceProvider extends ServiceProvider
 
     public function render(Shortcode $shortcode): View|Factory|Application|null
     {
-        $slider = Gallery::query()
+        $gallery = Gallery::query()
             ->wherePublished()
             ->where('key', $shortcode->key)
             ->first();
 
-        if (empty($slider) || $slider->sliderItems->isEmpty()) {
+        if (empty($gallery) || $gallery->sliderItems->isEmpty()) {
             return null;
         }
 
-        if (setting('simple_slider_using_assets', true) && defined('THEME_OPTIONS_MODULE_SCREEN_NAME')) {
-            $version = '1.0.2';
+        if (setting('gallery_using_assets', true) && defined('THEME_OPTIONS_MODULE_SCREEN_NAME')) {
+            $version = '1.0.0';
             $dist = asset('vendor/core/plugins/gallery');
 
             Theme::asset()
                 ->container('footer')
                 ->usePath(false)
                 ->add(
-                    'gallery-owl-carousel-css',
-                    $dist . '/libraries/owl-carousel/owl.carousel.css',
+                    'light-gallery-css',
+                    $dist . '/libraries/light-gallery/lightgallery.css',
                     [],
                     [],
                     $version
                 )
-                ->add('gallery-css', $dist . '/css/gallery.css', [], [], $version)
+//                ->add('light-gallery-css', $dist . '/css/gallery.css', [], [], $version)
                 ->add(
-                    'gallery-owl-carousel-js',
-                    $dist . '/libraries/owl-carousel/owl.carousel.js',
+                    'lg-main-js',
+                    $dist . '/libraries/light-gallery/lg-main.min.js',
+                    ['jquery'],
+                    [],
+                    $version
+                )
+                ->add(
+                    'lg-thumbnail-js',
+                    $dist . '/libraries/light-gallery/lg-thumbnail.min.js',
+                    ['jquery'],
+                    [],
+                    $version
+                )
+                ->add(
+                    'lg-fullscreen-js',
+                    $dist . '/libraries/light-gallery/lg-fullscreen.min.js',
                     ['jquery'],
                     [],
                     $version
@@ -82,10 +96,10 @@ class HookServiceProvider extends ServiceProvider
                 ->add('gallery-js', $dist . '/js/gallery.js', ['jquery'], [], $version);
         }
 
-        return view(apply_filters(SIMPLE_SLIDER_VIEW_TEMPLATE, 'plugins/gallery::sliders'), [
-            'sliders' => $slider->sliderItems,
+        return view(apply_filters(GALLERY_VIEW_TEMPLATE, 'plugins/gallery::sliders'), [
+            'sliders' => $gallery->sliderItems,
             'shortcode' => $shortcode,
-            'slider' => $slider,
+            'slider' => $gallery,
         ]);
     }
 }

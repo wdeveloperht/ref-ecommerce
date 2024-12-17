@@ -4,6 +4,7 @@ namespace Botble\Marketplace\Tables;
 
 use Botble\Base\Facades\BaseHelper;
 use Botble\Base\Facades\Html;
+use Botble\DataSynchronize\Table\HeaderActions\SyncHeaderAction;
 use Botble\DataSynchronize\Table\HeaderActions\ExportHeaderAction;
 use Botble\DataSynchronize\Table\HeaderActions\ImportHeaderAction;
 use Botble\Ecommerce\Enums\ProductTypeEnum;
@@ -41,6 +42,7 @@ class ProductTable extends TableAbstract
         $this
             ->model(Product::class)
             ->addHeaderActions([
+                SyncHeaderAction::make()->route('marketplace.vendor.sync.products.index'),
                 ExportHeaderAction::make()->route('marketplace.vendor.export.products.index'),
                 ImportHeaderAction::make()->route('marketplace.vendor.import.products.index'),
             ])

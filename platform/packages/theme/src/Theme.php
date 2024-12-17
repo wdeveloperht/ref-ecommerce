@@ -41,6 +41,8 @@ class Theme implements ThemeContract
 
     protected string $layout;
 
+    protected string $pageData;
+
     protected string $content;
 
     protected array $regions = [];
@@ -603,6 +605,18 @@ class Theme implements ThemeContract
     public function content(): ?string
     {
         return $this->regions['content'];
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function pageData()
+    {
+        if (!empty($this->regions['page'])) {
+            return $this->regions['page'];
+        }
+
+        return [];
     }
 
     /**

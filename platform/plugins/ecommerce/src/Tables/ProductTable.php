@@ -4,6 +4,7 @@ namespace Botble\Ecommerce\Tables;
 
 use Botble\Base\Facades\BaseHelper;
 use Botble\Base\Facades\Html;
+use Botble\DataSynchronize\Table\HeaderActions\SyncHeaderAction;
 use Botble\DataSynchronize\Table\HeaderActions\ExportHeaderAction;
 use Botble\DataSynchronize\Table\HeaderActions\ImportHeaderAction;
 use Botble\Ecommerce\Enums\ProductTypeEnum;
@@ -47,6 +48,9 @@ class ProductTable extends TableAbstract
                 DeleteAction::make()->route('products.destroy'),
             ])
             ->addHeaderActions([
+                SyncHeaderAction::make()
+                    ->route('tools.data-synchronize.sync.products.index'),
+//                    ->permission('ecommerce.sync.products.index'),
                 ExportHeaderAction::make()
                     ->route('tools.data-synchronize.export.products.index')
                     ->permission('ecommerce.export.products.index'),

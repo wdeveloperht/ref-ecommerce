@@ -1,14 +1,15 @@
 <div class="col">
     <div class="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0  wow animate__animated animate__fadeInUp" data-wow-delay="0">
+        @if($config['show_logo'])
         <div class="logo mb-30">
             <a href="{{ BaseHelper::getHomepageUrl() }}" class="mb-15">
                 {!! Theme::getLogoImage(['style' => 'max-height: 55px']) !!}
             </a>
-
             @if ($config['about'])
                 <p class="font-lg text-heading">{!! BaseHelper::clean($config['about']) !!}</p>
             @endif
         </div>
+        @endif
         <ul class="contact-infor">
             @if ($config['address'])
                 <li>

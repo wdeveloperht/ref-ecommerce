@@ -15,8 +15,8 @@ use Botble\Marketplace\Models\Store;
 use Botble\Media\Facades\RvMedia;
 use Botble\Menu\Facades\Menu;
 use Botble\Page\Models\Page;
-use Botble\SimpleSlider\Models\Gallery;
-use Botble\SimpleSlider\Models\GalleryItem;
+use Botble\SimpleSlider\Models\SimpleSlider;
+use Botble\SimpleSlider\Models\SimpleSliderItem;
 use Botble\SocialLogin\Facades\SocialService;
 use Botble\Theme\Facades\Theme;
 use Botble\Theme\Supports\ThemeSupport;
@@ -288,7 +288,7 @@ add_action(BASE_ACTION_META_BOXES, function ($context, $object): void {
 
             break;
 
-        case Gallery::class:
+        case SimpleSlider::class:
             if ($context == 'top') {
                 MetaBox::addMetaBox(
                     'additional_simple_slider_fields',
@@ -323,7 +323,7 @@ add_action([BASE_ACTION_AFTER_CREATE_CONTENT, BASE_ACTION_AFTER_UPDATE_CONTENT],
 
             break;
 
-        case Gallery::class:
+        case SimpleSlider::class:
             if ($request->has('simple_slider_style')) {
                 $style = $request->input('simple_slider_style');
                 if (in_array($style, array_keys(get_simple_slider_styles()))) {
@@ -385,7 +385,7 @@ add_action([BASE_ACTION_AFTER_CREATE_CONTENT, BASE_ACTION_AFTER_UPDATE_CONTENT],
 
             break;
 
-        case GalleryItem::class:
+        case SimpleSliderItem::class:
             if ($request->has('tablet_image')) {
                 MetaBox::saveMetaBoxData($object, 'tablet_image', $request->input('tablet_image'));
             }

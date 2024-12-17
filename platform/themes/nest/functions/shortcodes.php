@@ -14,6 +14,8 @@ use Botble\Ecommerce\Repositories\Interfaces\ProductInterface;
 use Botble\Faq\Models\FaqCategory;
 use Botble\Faq\Repositories\Interfaces\FaqCategoryInterface;
 use Botble\Payment\Enums\PaymentStatusEnum;
+use Botble\Services\Facades\ServiceManager;
+use Botble\Services\Models\Service;
 use Botble\Shortcode\Compilers\Shortcode;
 use Botble\Theme\Facades\Theme;
 use Botble\Theme\Supports\ThemeSupport;
@@ -24,6 +26,12 @@ use Illuminate\Support\Arr;
 app()->booted(function (): void {
     ThemeSupport::registerGoogleMapsShortcode();
     ThemeSupport::registerYoutubeShortcode();
+
+    if (is_plugin_active('gallery')) {
+        add_filter(GALLERY_VIEW_TEMPLATE, function () {
+            return Theme::getThemeNamespace() . '::partials.shortcodes.gallery.main';
+        }, 120);
+    }
 
     if (is_plugin_active('simple-slider')) {
         add_filter(SIMPLE_SLIDER_VIEW_TEMPLATE, function () {
@@ -99,7 +107,7 @@ app()->booted(function (): void {
                 ->whereIn('id', $flashSaleIds)
                 ->get();
 
-            if (! $flashSales->count()) {
+            if (!$flashSales->count()) {
                 return null;
             }
 
@@ -146,7 +154,7 @@ app()->booted(function (): void {
                     ->first();
             }
 
-            if (! $flashSalePopup || ! $flashSalePopup->products->count()) {
+            if (!$flashSalePopup || !$flashSalePopup->products->count()) {
                 return null;
             }
 
@@ -180,7 +188,7 @@ app()->booted(function (): void {
                     return null;
                 }
 
-                $limit = (int) $shortcode->limit ?: 8;
+                $limit = (int)$shortcode->limit ?: 8;
 
                 $products = get_products_by_collections(array_merge([
                     'collections' => [
@@ -191,7 +199,7 @@ app()->booted(function (): void {
                     'with' => EcommerceHelper::withProductEagerLoadingRelations(),
                 ], EcommerceHelper::withReviewsParams()));
 
-                $perRow = (int) $shortcode->per_row > 0 ? (int) $shortcode->per_row : 4;
+                $perRow = (int)$shortcode->per_row > 0 ? (int)$shortcode->per_row : 4;
 
                 return Theme::partial('shortcodes.ecommerce.product-collections', [
                     'title' => $shortcode->title,
@@ -219,7 +227,7 @@ app()->booted(function (): void {
                     ])
                     ->first();
 
-                if (! $category) {
+                if (!$category) {
                     return null;
                 }
 
@@ -229,7 +237,7 @@ app()->booted(function (): void {
                     },
                 ]);
 
-                $limit = (int) $shortcode->limit ?: 8;
+                $limit = (int)$shortcode->limit ?: 8;
 
                 $products = app(ProductInterface::class)->getProductsByCategories(array_merge([
                     'categories' => [
@@ -239,7 +247,7 @@ app()->booted(function (): void {
                     'take' => $limit,
                 ], EcommerceHelper::withReviewsParams()));
 
-                $perRow = (int) $shortcode->per_row > 0 ? (int) $shortcode->per_row : 4;
+                $perRow = (int)$shortcode->per_row > 0 ? (int)$shortcode->per_row : 4;
 
                 return Theme::partial(
                     'shortcodes.ecommerce.product-category-products',
@@ -281,7 +289,7 @@ app()->booted(function (): void {
 
                 $categoryIds = array_filter(explode(',', $shortcode->categories));
 
-                if (! empty($categoryIds)) {
+                if (!empty($categoryIds)) {
                     $params['condition'][] = ['ec_product_categories.id', 'IN', $categoryIds];
                 }
 
@@ -441,7 +449,7 @@ app()->booted(function (): void {
                     ->with(array_merge(['metadata'], EcommerceHelper::withProductEagerLoadingRelations()))
                     ->orderBy('ec_products.created_at', 'DESC')
                     ->orderBy('ec_products.order', 'ASC')
-                    ->limit((int) $shortcode->limit ?: 8)
+                    ->limit((int)$shortcode->limit ?: 8)
                     ->select('ec_products.*')
                     ->distinct();
 
@@ -497,17 +505,18 @@ app()->booted(function (): void {
 
         function display_ad(
             BaseModel|string $ads,
-            string $class = '',
-            $loop = null,
-            ?Shortcode $shortcode = null
-        ): ?string {
-            if (! ($ads instanceof BaseModel)) {
+            string           $class = '',
+                             $loop = null,
+            ?Shortcode       $shortcode = null
+        ): ?string
+        {
+            if (!($ads instanceof BaseModel)) {
                 $ads = AdsManager::getData()
                     ->where('key', $ads)
                     ->first();
             }
 
-            if (! $ads || ! $ads->image) {
+            if (!$ads || !$ads->image) {
                 return null;
             }
 
@@ -563,6 +572,88 @@ app()->booted(function (): void {
                 }
 
                 return $data . Theme::partial('shortcodes.sliders.config-in-admin', compact('ads', 'attributes'));
+            }, 50, 3);
+        }
+    }
+
+    if (is_plugin_active('services')) {
+        add_shortcode('theme-services', __('Theme services'), __('Theme services'), function (Shortcode $shortcode) {
+            $keys = get_service_keys_from_shortcode($shortcode);
+
+            return display_services($keys, $shortcode->style, $shortcode);
+        });
+
+        shortcode()->setAdminConfig('theme-services', function (array $attributes) {
+            $services = Service::query()
+                ->wherePublished()
+                ->get();
+
+            return Theme::partial('shortcodes.services.config-in-admin', compact('services', 'attributes'));
+        });
+
+        ServiceManager::load(false, ['metadata']);
+
+        function display_service(
+            BaseModel|string $service,
+            string           $class = '',
+                             $loop = null,
+            ?Shortcode       $shortcode = null
+        ): ?string
+        {
+            if (!($service instanceof BaseModel)) {
+                $service = ServiceManager::getData()
+                    ->where('key', $service)
+                    ->first();
+            }
+            if (!$service || !$service->image) {
+                return null;
+            }
+
+            return Theme::partial('shortcodes.services.item', compact('service', 'class', 'loop', 'shortcode'));
+        }
+
+        function get_service_keys_from_shortcode($shortcode): array
+        {
+            $keys = collect($shortcode->toArray())
+                ->sortKeys()
+                ->filter(function ($value, $key) use ($shortcode) {
+                    return Str::startsWith($key, 'service_') ||
+                        ($shortcode->name == 'theme-service' && Str::startsWith($key, 'key_'));
+                });
+
+            return array_filter($keys->toArray() + [$shortcode->services]);
+        }
+
+        function display_services(array $keys, ?string $style = '', ?Shortcode $shortcode = null): string
+        {
+            $keys = collect($keys);
+
+            return Theme::partial('shortcodes.services.items', compact('keys', 'style', 'shortcode'));
+        }
+
+        if (is_plugin_active('simple-slider')) {
+            add_filter(SHORTCODE_REGISTER_CONTENT_IN_ADMIN, function ($data, $key, $attributes) {
+                if ($key != 'simple-slider') {
+                    return $data;
+                }
+
+                $services = collect();
+
+                if (is_plugin_active('services')) {
+                    $services = Service::query()
+                        ->wherePublished()
+                        ->get();
+                    $data .= Theme::partial(
+                        'shortcodes.services.config-in-admin',
+                        compact('services', 'attributes') + ['total' => 2]
+                    );
+                }
+
+//                if (is_plugin_active('newsletter')) {
+//                    $data .= Theme::partial('shortcodes.sliders.newsletter-form-option', compact('attributes'));
+//                }
+
+                return $data . Theme::partial('shortcodes.sliders.config-in-admin', compact('services', 'attributes'));
             }, 50, 3);
         }
     }

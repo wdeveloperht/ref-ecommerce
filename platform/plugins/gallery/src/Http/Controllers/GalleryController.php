@@ -33,7 +33,7 @@ class GalleryController extends BaseController
         $this->pageTitle(trans('plugins/gallery::gallery.create'));
 
         return GalleryForm::create()
-            ->removeMetaBox('slider-items')
+            ->removeMetaBox('gallery-items')
             ->renderForm();
     }
 
@@ -49,20 +49,20 @@ class GalleryController extends BaseController
             ->withCreatedSuccessMessage();
     }
 
-    public function edit(Gallery $simpleSlider)
+    public function edit(Gallery $gallery)
     {
         Assets::addScripts('sortable')
             ->addScriptsDirectly('vendor/core/plugins/gallery/js/gallery-admin.js');
 
-        $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $simpleSlider->name]));
+        $this->pageTitle(trans('core/base::forms.edit_item', ['name' => $gallery->name]));
 
-        return GalleryForm::createFromModel($simpleSlider)
+        return GalleryForm::createFromModel($gallery)
             ->renderForm();
     }
 
-    public function update(Gallery $simpleSlider, GalleryRequest $request)
+    public function update(Gallery $gallery, GalleryRequest $request)
     {
-        GalleryForm::createFromModel($simpleSlider)->setRequest($request)->save();
+        GalleryForm::createFromModel($gallery)->setRequest($request)->save();
 
         return $this
             ->httpResponse()
@@ -70,9 +70,9 @@ class GalleryController extends BaseController
             ->withUpdatedSuccessMessage();
     }
 
-    public function destroy(Gallery $simpleSlider)
+    public function destroy(Gallery $gallery)
     {
-        return DeleteResourceAction::make($simpleSlider);
+        return DeleteResourceAction::make($gallery);
     }
 
     public function postSorting(Request $request)

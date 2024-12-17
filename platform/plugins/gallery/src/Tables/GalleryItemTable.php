@@ -42,7 +42,7 @@ class GalleryItemTable extends TableAbstract
                             'data-bs-toggle' => 'modal',
                             'data-bs-target' => '#gallery-item-modal',
                         ]) : '&mdash;';
-                    }),
+                }),
                 Column::make('order')
                     ->title(trans('core/base::tables.order'))
                     ->className('text-start order-column'),

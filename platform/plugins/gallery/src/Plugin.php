@@ -10,11 +10,11 @@ class Plugin extends PluginOperationAbstract
 {
     public static function remove(): void
     {
-        Schema::dropIfExists('simple_sliders');
-        Schema::dropIfExists('simple_slider_items');
+        Schema::dropIfExists('gallery');
+        Schema::dropIfExists('gallery_items');
 
         Setting::delete([
-            'simple_slider_using_assets',
+            'gallery_using_assets',
         ]);
     }
 }

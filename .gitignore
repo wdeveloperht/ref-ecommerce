@@ -1,7 +1,17 @@
 /node_modules
 /public/hot
 /public/storage
+
 /storage/*.key
+/storage/logs
+/storage/.license
+/storage/fonts
+/storage/framework/*.txt
+/storage/installing
+/storage/installed
+/storage/framework/laravel-excel/
+/storage/framework/maintenance.php
+
 /vendor
 .DS_Store
 Thumbs.db
@@ -38,21 +48,13 @@ public/docs
 resources/docs
 
 .phpunit.result.cache
-/storage/.license
-/storage/fonts
-/storage/framework/*.txt
-/storage/installing
-/storage/installed
 
 /lang/*
 !/lang/en
 
 /log
 
-storage/framework/laravel-excel/
 /.scribe
 /.env
 /.env.testing
 .phpactor.json
-
-storage/framework/maintenance.php

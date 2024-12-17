@@ -9,6 +9,7 @@ class SiteInfoWidget extends AbstractWidget
         parent::__construct([
             'name' => __('Site information'),
             'description' => __('Widget display site information'),
+            'show_logo' => null,
             'about' => null,
             'address' => null,
             'phone' => null,

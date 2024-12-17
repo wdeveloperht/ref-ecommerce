@@ -11,10 +11,11 @@ class GalleryRequest extends Request
     public function rules(): array
     {
         return [
+            'status' => Rule::in(BaseStatusEnum::values()),
             'name' => ['required', 'string', 'max:250'],
             'key' => ['required', 'string', 'max:120'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'status' => Rule::in(BaseStatusEnum::values()),
+            'image' => ['string']
         ];
     }
 }
