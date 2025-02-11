@@ -2,9 +2,13 @@
 
 namespace Botble\Ecommerce\Http\Controllers;
 
-use App\Events\AsAccountantProductSync;
-use Botble\DataSynchronize\Syncer\Syncer;
-use Botble\DataSynchronize\Http\Controllers\SyncController;
+use App\Constants\ClientResponse;
+use App\Events\AsAccountantProductSyncEvent;
+use App\Infrastructure\Services\AsAccountantService;
+use Botble\Ecommerce\Models\Product;
+use Botble\Ecommerce\Syncers\Syncer;
+use Botble\Ecommerce\Syncers\Controllers\SyncController;
+use Illuminate\Http\Request;
 use Botble\Ecommerce\Syncers\ProductSyncer;
 use Throwable;
 
@@ -22,9 +26,20 @@ class SyncProductController extends SyncController
         return $this->getSyncer()->render();
     }
 
-    public function store()
+    public function store(Request $request, AsAccountantService $asAccountantService)
     {
-        event(new AsAccountantProductSync());
+        dd($request->all());
+
+        $response = $asAccountantService->getProducts();
+        if ($response['status'] == ClientResponse::STATUS['success']) {
+            foreach ($response['data'] as $row) {
+                $sku = $row['MTCode'];
+                $product = Product::where('sku', $sku)->first() ??  new Product();
+                event(new AsAccountantProductSyncEvent($product, $this->setProductRequest($product, $row)));
+            }
+        }
+        dd(28);
+        // event(new AsAccountantProductSyncEvent());
 
         return $this
             ->httpResponse()
@@ -50,5 +65,4 @@ class SyncProductController extends SyncController
 //                ->setMessage($e->getMessage());
 //        }
     }
-
 }

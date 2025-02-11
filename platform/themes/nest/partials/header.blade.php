@@ -257,10 +257,16 @@
                             <i class="fi-rs-angle-down"></i>
                         </a>
                         <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
+                            <div class="d-flex categories-dropdown-inner">
+                                {!!
+                                    Theme::partial('product-root-categories-dropdown', [
+                                        'categories' => ProductCategoryHelper::getRootCategories()
+                                    ])
+                                !!}
+                            </div>
                             @php
-                                $categories = ProductCategoryHelper::getProductCategoriesWithUrl([], ['is_featured' => true]);
-                            @endphp
-
+                            /*
+                            $categories = ProductCategoryHelper::getProductCategoriesWithUrl([], ['is_featured' => true]);
                             <div class="d-flex categories-dropdown-inner">
                                 {!! Theme::partial('product-categories-dropdown', ['categories' => $categories, 'more' => false]) !!}
                             </div>
@@ -274,6 +280,8 @@
                             @if (count($categories) > 10)
                                 <div class="more_categories" data-text-show-more="{{ __('Show more...') }}" data-text-show-less="{{ __('Show less...') }}"><span class="icon"></span> <span class="heading-sm-1">{{ __('Show more...') }}</span></div>
                             @endif
+                            */
+                            @endphp
                         </div>
                     </div>
                 @endif

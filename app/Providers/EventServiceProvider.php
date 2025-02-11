@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\AsAccountantProductSync;
+use App\Events\AsAccountantProductSyncEvent;
 use App\Listeners\AsAccountantProductSyncListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        AsAccountantProductSync::class => [
+        AsAccountantProductSyncEvent::class => [
             AsAccountantProductSyncListener::class
         ]
     ];

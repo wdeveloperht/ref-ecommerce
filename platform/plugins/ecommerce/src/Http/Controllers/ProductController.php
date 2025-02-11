@@ -76,7 +76,6 @@ class ProductController extends BaseController
         StoreProductTagService $storeProductTagService
     ) {
         $product = new Product();
-
         $product->status = $request->input('status');
         if (EcommerceHelper::getCurrentCreationContextProductType() == ProductTypeEnum::DIGITAL) {
             $product->product_type = ProductTypeEnum::DIGITAL;
