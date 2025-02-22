@@ -5,17 +5,13 @@ namespace App\Infrastructure\Services;
 use App\Constants\AsAccountant;
 use App\Constants\ClientResponse;
 use App\Constants\Logging;
-use App\Events\AsAccountantProductSyncEvent;
 use App\Infrastructure\API\AsAccountantAPI;
 use Botble\Ecommerce\Models\Product;
-use Botble\Setting\Facades\Setting;
 use Botble\Slug\Models\Slug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
 
 class AsAccountantService
 {

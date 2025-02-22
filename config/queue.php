@@ -29,6 +29,7 @@ return [
     */
 
     'connections' => [
+
         'sync' => [
             'driver' => 'sync',
         ],

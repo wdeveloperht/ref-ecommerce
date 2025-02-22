@@ -12,7 +12,6 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
 class ProductCategoryHelper
@@ -21,7 +20,6 @@ class ProductCategoryHelper
 
     protected Collection $treeCategories;
 
-
     public function getRootCategories(): Collection
     {
         $cache = Cache::make(ProductCategory::class);
@@ -29,7 +27,7 @@ class ProductCategoryHelper
         $cacheKey = 'ecommerce_root_categories_for_widgets_' . md5($cache->generateCacheKeyFromInput() . serialize(func_get_args()));
 
         if ($cache->has($cacheKey)) {
-           // return $cache->get($cacheKey);
+            return $cache->get($cacheKey);
         }
 
         $tablePrefix = Schema::getConnection()->getTablePrefix();
@@ -76,18 +74,18 @@ class ProductCategoryHelper
 
     public function getAllProductCategories(array $params = [], bool $onlyParent = false): Collection
     {
-        if (!isset($this->allCategories)) {
+        if (! isset($this->allCategories)) {
             $query = ProductCategory::query();
 
-            if (!empty($conditions = Arr::get($params, 'condition', []))) {
+            if (! empty($conditions = Arr::get($params, 'condition', []))) {
                 $query = $query->where($conditions);
             }
 
-            if (!empty($with = Arr::get($params, 'with', []))) {
+            if (! empty($with = Arr::get($params, 'with', []))) {
                 $query = $query->with($with);
             }
 
-            if (!empty($withCount = Arr::get($params, 'withCount', []))) {
+            if (! empty($withCount = Arr::get($params, 'withCount', []))) {
                 $query = $query->withCount($withCount);
             }
 
@@ -149,7 +147,7 @@ class ProductCategoryHelper
 
     public function getTreeCategories(bool $activeOnly = false): Collection
     {
-        if (!isset($this->treeCategories)) {
+        if (! isset($this->treeCategories)) {
             $this->treeCategories = $this->getAllProductCategories(
                 [
                     'condition' => $activeOnly ? ['status' => BaseStatusEnum::PUBLISHED] : [],
@@ -164,11 +162,11 @@ class ProductCategoryHelper
 
     public function getTreeCategoriesOptions(array|Collection $categories, array $options = [], ?string $indent = null): array
     {
-        if (!$categories instanceof Collection) {
+        if (! $categories instanceof Collection) {
             foreach ($categories as $category) {
                 $options[$category['id']] = $indent . $category['name'];
 
-                if (!empty($category['active_children']) || !empty($category['children'])) {
+                if (! empty($category['active_children']) || ! empty($category['children'])) {
                     $options = $this->getTreeCategoriesOptions($category['active_children'] ?? $category['children'], $options, $indent . '&nbsp;&nbsp;');
                 }
             }
@@ -179,7 +177,7 @@ class ProductCategoryHelper
         foreach ($categories as $category) {
             $options[$category->id] = $indent . $category->name;
 
-            if (!empty($category->activeChildren)) {
+            if (! empty($category->activeChildren)) {
                 $options = $this->getTreeCategoriesOptions(
                     $category->activeChildren,
                     $options,
@@ -235,19 +233,17 @@ class ProductCategoryHelper
         $tablePrefix = Schema::getConnection()->getTablePrefix();
         $query = ProductCategory::query()
             ->toBase()
-            ->where('status', BaseStatusEnum::PUBLISHED);
-
-
-        $query->select([
-            'ec_product_categories.id',
-            'ec_product_categories.name',
-            'ec_product_categories.order',
-            'parent_id',
-            DB::raw("CONCAT({$tablePrefix}slugs.prefix, '/', {$tablePrefix}slugs.key) as url"),
-            'icon',
-            'image',
-            'icon_image',
-        ])
+            ->where('status', BaseStatusEnum::PUBLISHED)
+            ->select([
+                'ec_product_categories.id',
+                'ec_product_categories.name',
+                'ec_product_categories.order',
+                'parent_id',
+                DB::raw("CONCAT({$tablePrefix}slugs.prefix, '/', {$tablePrefix}slugs.key) as url"),
+                'icon',
+                'image',
+                'icon_image',
+            ])
             ->leftJoin('slugs', function (JoinClause $join): void {
                 $join
                     ->on('slugs.reference_id', 'ec_product_categories.id')
@@ -266,14 +262,13 @@ class ProductCategoryHelper
                         )
                     );
             })
-//            ->oldest('ec_product_categories.order')
-            ->orderBy('ec_product_categories.order', 'ASC')
+            ->oldest('ec_product_categories.order')
             ->when(
-                !empty($categoryIds),
-                fn(Builder $query) => $query->whereIn('ec_product_categories.id', $categoryIds)
+                ! empty($categoryIds),
+                fn (Builder $query) => $query->whereIn('ec_product_categories.id', $categoryIds)
             )
-            ->when($limit > 0, fn($query) => $query->limit($limit))
-            ->when($condition, fn($query) => $query->where($condition));
+            ->when($limit > 0, fn ($query) => $query->limit($limit))
+            ->when($condition, fn ($query) => $query->where($condition));
 
         $query = $this->applyQuery($query);
 

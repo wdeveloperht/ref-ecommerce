@@ -26,17 +26,17 @@ class SyncAsAccountantProduct extends Command
      */
     protected $description = 'Sync As Accountant Product.';
 
-    public AsAccountantService $asAccountantService;
+    public AsAccountantService $AsAccountantService;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(AsAccountantService $asAccountantService)
+    public function __construct(AsAccountantService $AsAccountantService)
     {
         parent::__construct();
-        $this->asAccountantService = $asAccountantService;
+        $this->AsAccountantService = $AsAccountantService;
     }
 
     /**
@@ -47,7 +47,7 @@ class SyncAsAccountantProduct extends Command
     public function handle(): void
     {
         try {
-            $response = $this->asAccountantService->getProducts();
+            $response = $this->AsAccountantService->getProducts();
             if ($response['status'] == ClientResponse::STATUS['success']) {
                 foreach ($response['data'] as $row) {
                     AsAccountantProductSyncJob::dispatch($row)->onQueue('high');

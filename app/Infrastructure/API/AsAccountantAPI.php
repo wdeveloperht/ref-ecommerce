@@ -31,9 +31,9 @@ trait AsAccountantAPI
                     'ShowColumns' => false
                 ],
                 'parameters' => [
-                    'Group' => '',
                     'MTID' => '',
                     'MTCode' => '',
+                    'Group' => '',
                     'ItemType' => '',
                     'Show' => '',
                     'PriceType' => '',
@@ -74,7 +74,7 @@ trait AsAccountantAPI
      * @param array $options
      * @return array
      */
-    protected function getProductsByStorageAPI( array $options = []): array
+    protected function getProductsByStorageAPI(array $options = []): array
     {
         $data = [];
         $status = ClientResponse::STATUS['error'];
@@ -89,7 +89,7 @@ trait AsAccountantAPI
                     'ShowColumns' => false
                 ],
                 'parameters' => [
-                    'RemDate' =>  Carbon::now()->toDateString(),
+                    'RemDate' => Carbon::now()->toDateString(),
                     'Storage' => '',
                     'MTGroup' => '',
                     'MTCode' => '',
@@ -106,7 +106,6 @@ trait AsAccountantAPI
                 ->send();
             if ($request->getStatusCode() === Response::HTTP_OK) {
                 $response = $request->getBody();
-
                 if (!empty($response['rows'])) {
                     $status = ClientResponse::STATUS['success'];
                     $rows = [];
@@ -123,7 +122,7 @@ trait AsAccountantAPI
                         }
                         $value['Qty'] = $qtys[$mtid];
 
-                        if(AsAccountant::STORAGES['tradeHall'] == $row['Storage']) {
+                        if (AsAccountant::STORAGES['tradeHall'] == $row['Storage']) {
                             $value['CostSumm'] = $row['CostSumm'];
                             $value['CostSummVAT'] = $row['CostSummVAT'];
                             $value['CurrCostSumm'] = $row['CurrCostSumm'];
