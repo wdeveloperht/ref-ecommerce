@@ -129,7 +129,7 @@ trait AsAccountantAPI
                             $value['CurrCost'] = $row['CurrCost'];
                             $value['Price'] = $row['Price'];
                             $value['Summ'] = $row['Summ'];
-                            $value['Col0'] = $row['Col0'];
+                            $value['Col0'] = 0; // $row['Col0'];
                         }
 
                         $rows[$mtid] = $value;
