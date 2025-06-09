@@ -69,7 +69,7 @@ class AsAccountantService
                 $product['CurrCost'] = $productsQtyData['data'][$productId]['CurrCost'] ?? 0;
                 $product['Price'] = $productsQtyData['data'][$productId]['Price'] ?? 0;
                 $product['Summ'] = $productsQtyData['data'][$productId]['Summ'] ?? 0;
-                // $product['Col0'] = $productsQtyData['data'][$productId]['Col0'] ?? 0;
+                $product['Col0'] = $productsQtyData['data'][$productId]['Col0'] ?? 0;
 
                 $data[$productId] = $product;
             }
